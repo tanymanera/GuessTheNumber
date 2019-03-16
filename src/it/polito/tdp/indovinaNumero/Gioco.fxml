@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polito.tdp.indovinaNumero.GiocoController">
+   <top>
+      <Label alignment="CENTER" contentDisplay="CENTER" text="Indovina il numero" textAlignment="CENTER" BorderPane.alignment="CENTER">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+   </top>
+   <center>
+      <VBox BorderPane.alignment="CENTER">
+         <children>
+            <HBox fx:id="boxGioca" alignment="CENTER">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#handleGioca" text="Gioca nuova partita" />
+               </children>
+               <opaqueInsets>
+                  <Insets bottom="7.0" left="7.0" right="7.0" top="7.0" />
+               </opaqueInsets>
+               <padding>
+                  <Insets bottom="7.0" left="7.0" right="7.0" top="7.0" />
+               </padding>
+            </HBox>
+            <HBox fx:id="boxInserisciNumero" disable="true" spacing="7.0">
+               <children>
+                  <TextField fx:id="txtInserisciNumero" prefHeight="25.0" prefWidth="279.0" promptText="Inserisci un numero in intervallo" />
+                  <TextField fx:id="txtMinValue" editable="false" prefHeight="25.0" prefWidth="40.0" />
+                  <TextField fx:id="txtMaxValue" editable="false" prefHeight="25.0" prefWidth="40.0" />
+                  <Button mnemonicParsing="false" onAction="#handleOk" text="OK" />
+               </children>
+               <padding>
+                  <Insets bottom="7.0" left="7.0" right="7.0" top="7.0" />
+               </padding>
+            </HBox>
+            <TextArea fx:id="txtRisultati" editable="false" prefHeight="200.0" prefWidth="200.0" />
+         </children>
+      </VBox>
+   </center>
+   <bottom>
+      <HBox BorderPane.alignment="CENTER">
+         <children>
+            <Label text="Numero tentativi rimasti: " />
+            <TextField fx:id="txtTentativiRimasti" editable="false" />
+         </children>
+         <padding>
+            <Insets bottom="7.0" left="7.0" right="7.0" top="7.0" />
+         </padding>
+      </HBox>
+   </bottom>
+</BorderPane>
