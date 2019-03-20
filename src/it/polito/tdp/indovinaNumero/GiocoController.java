@@ -3,6 +3,7 @@ package it.polito.tdp.indovinaNumero;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import it.polito.tdp.indovinaNumero.model.GiocoModel;
 import javafx.beans.property.BooleanProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -12,6 +13,12 @@ import javafx.scene.layout.HBox;
 
 public class GiocoController {
 	
+	private GiocoModel model;
+	
+	public void setModel(GiocoModel model) {
+		this.model = model;
+	}
+
 	private static final int N_MIN = 1;
 	private static final int N_MAX = 100;
 	private static final int N_TENTATIVI = 7;

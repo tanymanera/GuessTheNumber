@@ -1,5 +1,6 @@
 package it.polito.tdp.indovinaNumero;
 	
+import it.polito.tdp.indovinaNumero.model.GiocoModel;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
@@ -11,8 +12,15 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
+			GiocoModel model = new GiocoModel();
+			
+			//modifica standard di tutti i main generati da javafx
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("Gioco.fxml"));
 			BorderPane root = (BorderPane)loader.load();
+			GiocoController controller = loader.getController();
+			controller.setModel(model);
+			
+			
 			Scene scene = new Scene(root);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
