@@ -1,6 +1,7 @@
 package it.polito.tdp.indovinaNumero;
 
 import java.net.URL;
+import java.security.InvalidParameterException;
 import java.util.ResourceBundle;
 
 import it.polito.tdp.indovinaNumero.model.GiocoModel;
@@ -12,143 +13,123 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 
 public class GiocoController {
-	
+
+	private static final int TENTATIVO_RIUSCITO = 0;
+	private static final int TENTATIVO_BASSO = -1;
+	private static final int TENTATIVO_ALTO = 1;
+
 	private GiocoModel model;
-	
+
 	public void setModel(GiocoModel model) {
 		this.model = model;
 	}
 
-	private static final int N_MIN = 1;
-	private static final int N_MAX = 100;
-	private static final int N_TENTATIVI = 7;
-	
-	private boolean isGameOn = false;
-	private int numeroDaIndovinare;
-	private int limiteInferiore = N_MIN;
-	private int limiteSuperiore = N_MAX;
-	private int numeroProvato;
-	private int tentativoNumero = 0;
-	
 	@FXML
-    private HBox boxGioca;
+	private HBox boxGioca;
 
-    @FXML
-    private HBox boxInserisciNumero;
+	@FXML
+	private HBox boxInserisciNumero;
 
-    @FXML
-    private ResourceBundle resources;
+	@FXML
+	private ResourceBundle resources;
 
-    @FXML
-    private URL location;
+	@FXML
+	private URL location;
 
-    @FXML
-    private TextField txtInserisciNumero;
+	@FXML
+	private TextField txtInserisciNumero;
 
-    @FXML
-    private TextField txtMinValue;
+	@FXML
+	private TextField txtMinValue;
 
-    @FXML
-    private TextField txtMaxValue;
-    
-    @FXML
-    private TextArea txtRisultati;
+	@FXML
+	private TextField txtMaxValue;
 
-    @FXML
-    private TextField txtTentativiRimasti;
+	@FXML
+	private TextArea txtRisultati;
 
-    @FXML
-    void handleGioca(ActionEvent event) {
-    	isGameOn = true;
-    	boxGioca.setDisable(isGameOn);
-    	boxInserisciNumero.setDisable(!isGameOn);
-    	txtInserisciNumero.clear();
-    	limiteInferiore = N_MIN;
-    	limiteSuperiore = N_MAX;
-    	txtMinValue.setText(Integer.toString(N_MIN));
-    	txtMaxValue.setText(Integer.toString(N_MAX));
-    	txtRisultati.clear();
-    	txtRisultati.appendText("Gioco iniziato.\n");
-    	tentativoNumero = 0;
-    	txtTentativiRimasti.setText(Integer.toString(N_TENTATIVI));
-    	
-    	//Genera il numeroDaIndovinare
-    	numeroDaIndovinare = (int)(Math.random()*N_MAX) + 1;
+	@FXML
+	private TextField txtTentativiRimasti;
 
-    }
-    
-    @FXML
-    void handleOk(ActionEvent event) {
-    	
-    	//controllo che quanto inserito sia un numero
-    	try {
-    		numeroProvato = Integer.parseInt(txtInserisciNumero.getText().trim());
-    	} catch(NumberFormatException e){
-    		txtRisultati.appendText("Non è stato inserito un numero valido.\n");
-    		txtInserisciNumero.clear();
-    		return;
-    	}
-    	
-    	//controllo che il numero si in intervallo [limiteInf, limiteSup]
-    	if(numeroProvato < limiteInferiore || numeroProvato > limiteSuperiore) {
-    		txtRisultati.appendText("Numero fuori dall'intervallo corrente.\n");
-    		txtInserisciNumero.clear();
-    		return;
-    	}
-    	
-    	// aggiorno txtTentativiRimasti
-    	tentativoNumero++;
-    	txtTentativiRimasti.setText(Integer.toString(N_TENTATIVI - tentativoNumero));
-    	
-    	//se il numero provato è corretto lo comunico vittoria e esco dal gioco.
-    	if(numeroDaIndovinare == numeroProvato) {
-    		txtRisultati.appendText("Complimenti. HAI VINTO! Hai usato " + tentativoNumero + " tentativi.\n");
-    		quitGame();
-    		return;
-    	}
-    	
-    	//se il numero è basso lo comunico e pongo limiteInreriore = numeroProvato
-    	//altrimenti comunico che è alto e pongo limiteSuperiore = numeroProvato.
-    	if(numeroProvato < numeroDaIndovinare) {
-    		txtRisultati.appendText("Il numero provato è più piccolo del numero segreto.\n");
-    		limiteInferiore = numeroProvato;
-    		txtMinValue.setText(Integer.toString(numeroProvato + 1));
-    		txtInserisciNumero.clear();
-    	} else {
-    		txtRisultati.appendText("Il numero provato è più grande del numero segreto.\n");
-    		limiteSuperiore = numeroProvato;
-    		txtMaxValue.setText(Integer.toString(numeroProvato - 1));
-    		txtInserisciNumero.clear();
-    	}
-    	
-    	//testo se il numero di tentativi == N_TENTIVI. Se si esco dal gioco.
-    	if(tentativoNumero == N_TENTATIVI) {
-    		txtRisultati.appendText("Tentativi esauriti. HAI PERSO! Il numero da indovinare era: " + 
-    	numeroDaIndovinare + "\n");
-    		quitGame();
-    		return;
-    	}
-    	
+	@FXML
+	void handleGioca(ActionEvent event) {
 
-    }
+		model.newGame();
 
-    private void quitGame() {
-		isGameOn = false;
-		boxGioca.setDisable(isGameOn);
-		boxInserisciNumero.setDisable(!isGameOn);
-		
+		boxGioca.setDisable(model.isGameOn());
+		boxInserisciNumero.setDisable(!model.isGameOn());
+		txtInserisciNumero.clear();
+
+		txtMinValue.setText(Integer.toString(model.getLimiteInferiore()));
+		txtMaxValue.setText(Integer.toString(model.getLimiteSuperiore()));
+		txtRisultati.clear();
+		txtRisultati.appendText("Gioco iniziato.\n");
+
+		txtTentativiRimasti.setText(Integer.toString(model.getnTentativi()));
+
 	}
 
 	@FXML
-    void initialize() {
-    	assert boxGioca != null : "fx:id=\"boxGioca\" was not injected: check your FXML file 'Gioco.fxml'.";
-        assert boxInserisciNumero != null : "fx:id=\"boxInserisciNumero\" was not injected: check your FXML file 'Gioco.fxml'.";
-        assert txtInserisciNumero != null : "fx:id=\"txtInserisciNumero\" was not injected: check your FXML file 'Gioco.fxml'.";
-        assert txtMinValue != null : "fx:id=\"txtMinValue\" was not injected: check your FXML file 'Gioco.fxml'.";
-        assert txtMaxValue != null : "fx:id=\"txtMaxValue\" was not injected: check your FXML file 'Gioco.fxml'.";
-        assert txtRisultati != null : "fx:id=\"txtRisultati\" was not injected: check your FXML file 'Gioco.fxml'.";
-        assert txtTentativiRimasti != null : "fx:id=\"txtTentativiRimasti\" was not injected: check your FXML file 'Gioco.fxml'.";
+	void handleOk(ActionEvent event) {
+		int numeroProvato;
 
-    }
+		// controllo che quanto inserito sia un numero
+
+		try {
+			numeroProvato = Integer.parseInt(txtInserisciNumero.getText().trim());
+
+		} catch (NumberFormatException e) {
+			txtRisultati.appendText("Non è stato inserito un numero valido.\n");
+			txtInserisciNumero.clear();
+			return;
+		}
+		
+		try {
+			int risultato = model.tentativo(numeroProvato);
+			if (risultato == TENTATIVO_RIUSCITO) {
+				txtRisultati.appendText("Hai vinto! Hai indovinato in " + model.getTentativoNumero() + "tentativi.\n");
+				return;
+			} else if (risultato == TENTATIVO_ALTO) {
+				txtRisultati.appendText("Il numero provato è più grande del numero segreto.\n");
+				txtMaxValue.setText(Integer.toString(model.getLimiteSuperiore()));
+				txtInserisciNumero.clear();
+			} else {
+				txtRisultati.appendText("Il numero provato è più piccolo del numero segreto.\n");
+				txtMinValue.setText(Integer.toString(model.getLimiteInferiore()));
+				txtInserisciNumero.clear();
+			}
+		} catch (IllegalStateException e) {
+			txtRisultati.appendText(
+					e.getMessage() + String.format(" Il numero segreto era: %d.\n", model.getNumeroDaIndovinare()));
+			quitGame();
+			return;
+		} catch (InvalidParameterException e) {
+			txtRisultati.appendText(e.getMessage());
+			txtInserisciNumero.clear();
+			return;
+		}
+
+		// aggiorno txtTentativiRimasti
+		txtTentativiRimasti.setText(Integer.toString(model.getnTentativi() - model.getTentativoNumero()));
+
+	}
+
+	private void quitGame() {
+		boxGioca.setDisable(model.isGameOn());
+		boxInserisciNumero.setDisable(!model.isGameOn());
+//		txtRisultati.clear();
+//		txtTentativiRimasti.clear();
+	}
+
+	@FXML
+	void initialize() {
+		assert boxGioca != null : "fx:id=\"boxGioca\" was not injected: check your FXML file 'Gioco.fxml'.";
+		assert boxInserisciNumero != null : "fx:id=\"boxInserisciNumero\" was not injected: check your FXML file 'Gioco.fxml'.";
+		assert txtInserisciNumero != null : "fx:id=\"txtInserisciNumero\" was not injected: check your FXML file 'Gioco.fxml'.";
+		assert txtMinValue != null : "fx:id=\"txtMinValue\" was not injected: check your FXML file 'Gioco.fxml'.";
+		assert txtMaxValue != null : "fx:id=\"txtMaxValue\" was not injected: check your FXML file 'Gioco.fxml'.";
+		assert txtRisultati != null : "fx:id=\"txtRisultati\" was not injected: check your FXML file 'Gioco.fxml'.";
+		assert txtTentativiRimasti != null : "fx:id=\"txtTentativiRimasti\" was not injected: check your FXML file 'Gioco.fxml'.";
+
+	}
 }
-
