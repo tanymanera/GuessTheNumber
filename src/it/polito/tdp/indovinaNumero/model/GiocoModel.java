@@ -64,6 +64,7 @@ public class GiocoModel {
     	
     	//se il numero provato è corretto lo comunico vittoria e esco dal gioco.
     	if(numeroDaIndovinare == numeroProvato) {
+    		gameOn = false;
     		return TENTATIVO_RIUSCITO;
     	}
     	

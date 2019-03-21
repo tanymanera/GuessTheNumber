@@ -62,17 +62,15 @@ public class GiocoController {
 
 		txtMinValue.setText(Integer.toString(model.getLimiteInferiore()));
 		txtMaxValue.setText(Integer.toString(model.getLimiteSuperiore()));
-		txtRisultati.clear();
-		txtRisultati.appendText("Gioco iniziato.\n");
-
 		txtTentativiRimasti.setText(Integer.toString(model.getnTentativi()));
+		txtRisultati.setText("Gioco iniziato.\n");
 
 	}
 
 	@FXML
 	void handleOk(ActionEvent event) {
 		int numeroProvato;
-
+		
 		// controllo che quanto inserito sia un numero
 
 		try {
@@ -83,12 +81,13 @@ public class GiocoController {
 			txtInserisciNumero.clear();
 			return;
 		}
-		
+
 		try {
 			int risultato = model.tentativo(numeroProvato);
 			if (risultato == TENTATIVO_RIUSCITO) {
-				txtRisultati.appendText("Hai vinto! Hai indovinato in " + model.getTentativoNumero() + "tentativi.\n");
-				return;
+				txtRisultati.appendText(
+						"Hai vinto! Hai indovinato in " + model.getTentativoNumero() + "tentativi.\n");
+				quitGame();
 			} else if (risultato == TENTATIVO_ALTO) {
 				txtRisultati.appendText("Il numero provato è più grande del numero segreto.\n");
 				txtMaxValue.setText(Integer.toString(model.getLimiteSuperiore()));
@@ -98,6 +97,20 @@ public class GiocoController {
 				txtMinValue.setText(Integer.toString(model.getLimiteInferiore()));
 				txtInserisciNumero.clear();
 			}
+			// aggiorno txtTentativiRimasti
+			txtTentativiRimasti.setText(
+					Integer.toString(model.getnTentativi() - model.getTentativoNumero()));
+
+			if (!model.isGameOn()) {
+				// la partita è finita
+				if (risultato != TENTATIVO_RIUSCITO) {
+					txtRisultati.appendText("Hai perso!\n");
+					txtRisultati.appendText(
+							String.format("Il numero da indovinare era: %d.\n", model.getNumeroDaIndovinare()));
+					quitGame();
+				}
+			}
+
 		} catch (IllegalStateException e) {
 			txtRisultati.appendText(
 					e.getMessage() + String.format(" Il numero segreto era: %d.\n", model.getNumeroDaIndovinare()));
@@ -108,9 +121,6 @@ public class GiocoController {
 			txtInserisciNumero.clear();
 			return;
 		}
-
-		// aggiorno txtTentativiRimasti
-		txtTentativiRimasti.setText(Integer.toString(model.getnTentativi() - model.getTentativoNumero()));
 
 	}
 
