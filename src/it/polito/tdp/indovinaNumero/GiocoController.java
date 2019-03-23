@@ -5,7 +5,9 @@ import java.security.InvalidParameterException;
 import java.util.ResourceBundle;
 
 import it.polito.tdp.indovinaNumero.model.GiocoModel;
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.Property;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
@@ -22,6 +24,9 @@ public class GiocoController {
 
 	public void setModel(GiocoModel model) {
 		this.model = model;
+		
+		txtMinValue.textProperty().bind(Bindings.convert(model.limiteInferioreProperty()));
+		txtMaxValue.textProperty().bind(Bindings.convert(model.limiteSuperioreProperty()));
 	}
 
 	@FXML
@@ -60,8 +65,6 @@ public class GiocoController {
 		boxInserisciNumero.setDisable(!model.isGameOn());
 		txtInserisciNumero.clear();
 
-		txtMinValue.setText(Integer.toString(model.getLimiteInferiore()));
-		txtMaxValue.setText(Integer.toString(model.getLimiteSuperiore()));
 		txtTentativiRimasti.setText(Integer.toString(model.getnTentativi()));
 		txtRisultati.setText("Gioco iniziato.\n");
 
@@ -90,11 +93,9 @@ public class GiocoController {
 				quitGame();
 			} else if (risultato == TENTATIVO_ALTO) {
 				txtRisultati.appendText("Il numero provato è più grande del numero segreto.\n");
-				txtMaxValue.setText(Integer.toString(model.getLimiteSuperiore()));
 				txtInserisciNumero.clear();
 			} else {
 				txtRisultati.appendText("Il numero provato è più piccolo del numero segreto.\n");
-				txtMinValue.setText(Integer.toString(model.getLimiteInferiore()));
 				txtInserisciNumero.clear();
 			}
 			// aggiorno txtTentativiRimasti
@@ -127,8 +128,7 @@ public class GiocoController {
 	private void quitGame() {
 		boxGioca.setDisable(model.isGameOn());
 		boxInserisciNumero.setDisable(!model.isGameOn());
-//		txtRisultati.clear();
-//		txtTentativiRimasti.clear();
+
 	}
 
 	@FXML

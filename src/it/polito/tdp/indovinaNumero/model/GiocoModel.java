@@ -3,6 +3,11 @@ package it.polito.tdp.indovinaNumero.model;
 import java.nio.channels.IllegalSelectorException;
 import java.security.InvalidParameterException;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+
 public class GiocoModel {
 	
 	private static final int N_MIN = 1;
@@ -14,13 +19,18 @@ public class GiocoModel {
 	
 	private boolean gameOn = false;
 	private int numeroDaIndovinare;
-	private int limiteInferiore = N_MIN;
-	private int limiteSuperiore = N_MAX;
+
+	private IntegerProperty limiteInferiore;
+	private IntegerProperty limiteSuperiore;
 	private int numeroProvato;
 	private int tentativoNumero = 0;
 	
 	public GiocoModel() {
 		gameOn = false;
+		
+		//costruzione delle Property
+		limiteInferiore = new SimpleIntegerProperty();
+		limiteSuperiore = new SimpleIntegerProperty();
 	}
 	
 	/**
@@ -28,8 +38,8 @@ public class GiocoModel {
 	 */
 	public void newGame() {
 		gameOn = true;
-		limiteInferiore = N_MIN;
-		limiteSuperiore = N_MAX;
+		limiteInferiore.set(N_MIN);
+		limiteSuperiore.set(N_MAX);
 		tentativoNumero = 0;
 		
 		//Genera il numeroDaIndovinare
@@ -50,7 +60,7 @@ public class GiocoModel {
 		}
 		
 		//controllo che il numero si in intervallo [limiteInf, limiteSup]
-    	if(numeroProvato < limiteInferiore || numeroProvato > limiteSuperiore) {
+    	if(numeroProvato < limiteInferiore.get() || numeroProvato > limiteSuperiore.get()) {
     		
     		throw new InvalidParameterException(String.format("Il valore inserito è " +
     		"fuori dal range [%d, %d].\n", limiteInferiore, limiteSuperiore));
@@ -71,29 +81,17 @@ public class GiocoModel {
     	//se il numero è basso lo comunico e pongo limiteInreriore = numeroProvato
     	//altrimenti comunico che è alto e pongo limiteSuperiore = numeroProvato.
     	if(numeroProvato < numeroDaIndovinare) {
-    		limiteInferiore = numeroProvato +1;
+    		limiteInferiore.set(numeroProvato +1);
     		return TENTATIVO_BASSO;
     	} else {
-    		limiteSuperiore = numeroProvato - 1;
+    		limiteSuperiore.set(numeroProvato - 1);
     		return TENTATIVO_ALTO;
     	}
     	
 	}
 
-	public boolean isGameOn() {
-		return gameOn;
-	}
-
 	public int getNumeroDaIndovinare() {
 		return numeroDaIndovinare;
-	}
-
-	public int getLimiteInferiore() {
-		return limiteInferiore;
-	}
-
-	public int getLimiteSuperiore() {
-		return limiteSuperiore;
 	}
 
 	public int getNumeroProvato() {
@@ -106,6 +104,39 @@ public class GiocoModel {
 
 	public int getnTentativi() {
 		return N_TENTATIVI;
+	}
+
+	public final IntegerProperty limiteInferioreProperty() {
+		return this.limiteInferiore;
+	}
+	
+
+	public final int getLimiteInferiore() {
+		return this.limiteInferioreProperty().get();
+	}
+	
+
+	public final void setLimiteInferiore(final int limiteInferiore) {
+		this.limiteInferioreProperty().set(limiteInferiore);
+	}
+	
+
+	public final IntegerProperty limiteSuperioreProperty() {
+		return this.limiteSuperiore;
+	}
+	
+
+	public final int getLimiteSuperiore() {
+		return this.limiteSuperioreProperty().get();
+	}
+	
+
+	public final void setLimiteSuperiore(final int limiteSuperiore) {
+		this.limiteSuperioreProperty().set(limiteSuperiore);
+	}
+
+	public boolean isGameOn() {
+		return gameOn;
 	}
 
 }
