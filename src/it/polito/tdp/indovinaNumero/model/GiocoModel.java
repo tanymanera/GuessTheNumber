@@ -1,11 +1,7 @@
 package it.polito.tdp.indovinaNumero.model;
 
-import java.nio.channels.IllegalSelectorException;
 import java.security.InvalidParameterException;
-
-import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
 public class GiocoModel {
@@ -24,7 +20,7 @@ public class GiocoModel {
 	private IntegerProperty limiteSuperiore;
 	private int numeroProvato;
 	private int tentativoNumero = 0;
-	
+
 	public GiocoModel() {
 		gameOn = false;
 		
@@ -101,7 +97,7 @@ public class GiocoModel {
 	public int getTentativoNumero() {
 		return tentativoNumero;
 	}
-
+	
 	public int getnTentativi() {
 		return N_TENTATIVI;
 	}

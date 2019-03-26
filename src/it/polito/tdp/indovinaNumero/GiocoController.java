@@ -6,8 +6,6 @@ import java.util.ResourceBundle;
 
 import it.polito.tdp.indovinaNumero.model.GiocoModel;
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.Property;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
