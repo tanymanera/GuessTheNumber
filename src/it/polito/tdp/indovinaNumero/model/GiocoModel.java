@@ -116,23 +116,23 @@ public class GiocoModel {
 		this.limiteInferioreProperty().set(limiteInferiore);
 	}
 	
+	public boolean isGameOn() {
+		return gameOn;
+	}
 
-	public final IntegerProperty limiteSuperioreProperty() {
+	public IntegerProperty limiteSuperioreProperty() {
 		return this.limiteSuperiore;
 	}
 	
 
-	public final int getLimiteSuperiore() {
+	public int getLimiteSuperiore() {
 		return this.limiteSuperioreProperty().get();
 	}
 	
 
-	public final void setLimiteSuperiore(final int limiteSuperiore) {
+	public void setLimiteSuperiore(final int limiteSuperiore) {
 		this.limiteSuperioreProperty().set(limiteSuperiore);
 	}
-
-	public boolean isGameOn() {
-		return gameOn;
-	}
+	
 
 }
