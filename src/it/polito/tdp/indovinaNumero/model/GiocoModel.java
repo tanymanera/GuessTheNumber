@@ -59,7 +59,7 @@ public class GiocoModel {
     	if(numeroProvato < limiteInferiore.get() || numeroProvato > limiteSuperiore.get()) {
     		
     		throw new InvalidParameterException(String.format("Il valore inserito è " +
-    		"fuori dal range [%d, %d].\n", limiteInferiore, limiteSuperiore));
+    		"fuori dal range [%d, %d].\n", limiteInferiore.get(), limiteSuperiore.get()));
     	}
     	//gestisce il tentativo
     	tentativoNumero++;

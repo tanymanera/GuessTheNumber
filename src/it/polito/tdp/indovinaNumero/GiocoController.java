@@ -22,7 +22,7 @@ public class GiocoController {
 
 	public void setModel(GiocoModel model) {
 		this.model = model;
-		
+
 		txtMinValue.textProperty().bind(Bindings.convert(model.limiteInferioreProperty()));
 		txtMaxValue.textProperty().bind(Bindings.convert(model.limiteSuperioreProperty()));
 	}
@@ -71,7 +71,7 @@ public class GiocoController {
 	@FXML
 	void handleOk(ActionEvent event) {
 		int numeroProvato;
-		
+
 		// controllo che quanto inserito sia un numero
 
 		try {
@@ -86,8 +86,7 @@ public class GiocoController {
 		try {
 			int risultato = model.tentativo(numeroProvato);
 			if (risultato == TENTATIVO_RIUSCITO) {
-				txtRisultati.appendText(
-						"Hai vinto! Hai indovinato in " + model.getTentativoNumero() + "tentativi.\n");
+				txtRisultati.appendText("Hai vinto! Hai indovinato in " + model.getTentativoNumero() + "tentativi.\n");
 				quitGame();
 			} else if (risultato == TENTATIVO_ALTO) {
 				txtRisultati.appendText("Il numero provato è più grande del numero segreto.\n");
@@ -97,8 +96,7 @@ public class GiocoController {
 				txtInserisciNumero.clear();
 			}
 			// aggiorno txtTentativiRimasti
-			txtTentativiRimasti.setText(
-					Integer.toString(model.getnTentativi() - model.getTentativoNumero()));
+			txtTentativiRimasti.setText(Integer.toString(model.getnTentativi() - model.getTentativoNumero()));
 
 			if (!model.isGameOn()) {
 				// la partita è finita
@@ -110,14 +108,14 @@ public class GiocoController {
 				}
 			}
 
+		} catch (InvalidParameterException e) {
+			txtRisultati.appendText(e.getMessage());
+			txtInserisciNumero.clear();
+			return;
 		} catch (IllegalStateException e) {
 			txtRisultati.appendText(
 					e.getMessage() + String.format(" Il numero segreto era: %d.\n", model.getNumeroDaIndovinare()));
 			quitGame();
-			return;
-		} catch (InvalidParameterException e) {
-			txtRisultati.appendText(e.getMessage());
-			txtInserisciNumero.clear();
 			return;
 		}
 
